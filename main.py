@@ -44,6 +44,13 @@ def limit(func, a, b): #draws the graph of func around the point (a,b)
 
     plt.show()
 
-def grad(func, x, y, h = 10**(-8)): # returns apporx grad for function at (x,y) as a tuple
-        return(((func(x,y+h)-func(x,y))/h),((func(x+h,y)-func(x,y))/h))
+def grad(func, x, y, h = 10**(-5)): # returns apporx grad for function at (x,y) as a tuple
+    return(((func(x+h,y)-func(x,y))/h),((func(x,y+h)-func(x,y))/h))
 
+def hessian(func, x, y, h = 10**(-8)): # returns a hessian matrix of func at x, y. for some reason doesnt always work w h = e-8
+    f1 = lambda x, y: ((func(x+h,y)-func(x,y))/h)
+    f2 = lambda x, y: ((func(x,y+h)-func(x,y))/h)
+    return(np.array([[(f1(x+h,y)-f1(x,y))/h,(f1(x,y+h)-f1(x,y))/h],
+                      [(f2(x+h,y)-f2(x,y))/h,(f2(x,y+h)-f2(x,y))/h]]))
+
+print(hessian(lambda x, y: np.sin(x+y),1,1))
