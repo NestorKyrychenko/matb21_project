@@ -44,4 +44,6 @@ def limit(func, a, b): #draws the graph of func around the point (a,b)
 
     plt.show()
 
-limit(f1,1,1)
+def grad(func, x, y, h = 10**(-8)): # returns apporx grad for function at (x,y) as a tuple
+        return(((func(x,y+h)-func(x,y))/h),((func(x+h,y)-func(x,y))/h))
+
