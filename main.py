@@ -23,9 +23,9 @@ def g2(x,y):
     return((x**2 + 3* y**2)*np.e**(-x**2-y**2))
 
 
-def limit(func, a, b): #draws the graph of func around the point (a,b)
+def limit(func, a, b, delta = 0.5): #draws the graph of func around the point (a,b)
     ax = plt.figure().add_subplot(projection='3d')
-    X, Y = np.meshgrid(np.linspace(a-0.5,a+0.5,100),np.linspace(b-0.5,b+0.5,100))
+    X, Y = np.meshgrid(np.linspace(a-delta,a+delta,100),np.linspace(b-delta,b+delta,100))
     Z = func(X,Y)
 
     # Plot the 3D surface
@@ -36,21 +36,21 @@ def limit(func, a, b): #draws the graph of func around the point (a,b)
     # that match the appropriate axes limits, the projected contours will sit on
     # the 'walls' of the graph.
     ax.contour(X, Y, Z, zdir='z', offset=0, cmap='coolwarm')
-    ax.contour(X, Y, Z, zdir='x', offset=a-0.5, cmap='coolwarm')
-    ax.contour(X, Y, Z, zdir='y', offset=b-0.5, cmap='coolwarm')
+    ax.contour(X, Y, Z, zdir='x', offset=a-delta, cmap='coolwarm')
+    ax.contour(X, Y, Z, zdir='y', offset=b-delta, cmap='coolwarm')
 
-    ax.set(xlim=(0.5, 1.5), ylim=(0.5, 1.5), zlim=(0, 1.25),
+    ax.set(xlim=(a-delta, a+delta), ylim=(b-delta, b+delta),
         xlabel='X', ylabel='Y', zlabel='Z')
 
     plt.show()
 
-def grad(func, x, y, h = 10**(-5)): # returns apporx grad for function at (x,y) as a tuple
-    return(((func(x+h,y)-func(x,y))/h),((func(x,y+h)-func(x,y))/h))
+def grad(func, x, y, h = 10**(-6)): # returns apporx grad for function at (x,y) as an array
+    return(np.array([[(func(x+h,y)-func(x,y))/h,(func(x,y+h)-func(x,y))/h]]))
 
-def hessian(func, x, y, h = 10**(-8)): # returns a hessian matrix of func at x, y. for some reason doesnt always work w h = e-8
+def hessian(func, x, y, h = 10**(-6)): # returns a hessian matrix of func at x, y. for some reason doesnt always work w h = e-8
     f1 = lambda x, y: ((func(x+h,y)-func(x,y))/h)
     f2 = lambda x, y: ((func(x,y+h)-func(x,y))/h)
     return(np.array([[(f1(x+h,y)-f1(x,y))/h,(f1(x,y+h)-f1(x,y))/h],
                       [(f2(x+h,y)-f2(x,y))/h,(f2(x,y+h)-f2(x,y))/h]]))
 
-print(hessian(lambda x, y: np.sin(x+y),1,1))
+limit(g1,0,0)
