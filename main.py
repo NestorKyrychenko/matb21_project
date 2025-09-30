@@ -52,6 +52,3 @@ def hessian(func, x, y, h = 10**(-6)): # returns a hessian matrix of func at x, 
     f2 = lambda x, y: ((func(x,y+h)-func(x,y))/h)
     return(np.array([[(f1(x+h,y)-f1(x,y))/h,(f1(x,y+h)-f1(x,y))/h],
                       [(f2(x+h,y)-f2(x,y))/h,(f2(x,y+h)-f2(x,y))/h]]))
-
-limit(g1,1,1, delta = 10)
-
