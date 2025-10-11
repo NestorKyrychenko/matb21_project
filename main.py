@@ -32,16 +32,10 @@ def limit(func, a, b, delta = 0.5): #draws the graph of func around the point (a
     ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,
                     alpha=0.3)
 
-    # Plot projections of the contours for each dimension.  By choosing offsets
-    # that match the appropriate axes limits, the projected contours will sit on
-    # the 'walls' of the graph.
-    ax.contour(X, Y, Z, zdir='z', offset=0, cmap='coolwarm')
-    ax.contour(X, Y, Z, zdir='x', offset=a-delta, cmap='coolwarm')
-    ax.contour(X, Y, Z, zdir='y', offset=b-delta, cmap='coolwarm')
-
-    ax.set(xlim=(a-delta, a+delta), ylim=(b-delta, b+delta),
+    z_min = np.nanmin(Z)
+    ax.contourf(X,Y,Z,15, cmap='coolwarm',alpha=0.85, zdir='z', offset=z_min)
+    ax.set(xlim=(a-delta, a+delta), ylim=(b-delta, b+delta), zlim=(z_min,np.nanmax(Z)),
         xlabel='X', ylabel='Y', zlabel='Z')
-
     plt.show()
 
 def grad(func, x, y, h = 10**(-6)): # returns apporx grad for function at (x,y) as an array
@@ -53,4 +47,4 @@ def hessian(func, x, y, h = 10**(-6)): # returns a hessian matrix of func at x, 
     return(np.array([[(f1(x+h,y)-f1(x,y))/h,(f1(x,y+h)-f1(x,y))/h],
                       [(f2(x+h,y)-f2(x,y))/h,(f2(x,y+h)-f2(x,y))/h]]))
 
-limit(g1,0,0)
+limit(f3,0,-1,delta=0.1)
