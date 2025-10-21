@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import axes3d
+import scipy
+import time
+
 
 #Task 1
 
@@ -38,8 +41,10 @@ def limit(func, a, b, delta = 0.5): #draws the graph of func around the point (a
         xlabel='X', ylabel='Y', zlabel='Z')
     plt.show()
 
+#task 2
+
 def grad(func, x, y, h = 10**(-6)): # returns apporx grad for function at (x,y) as an array
-    return(np.array([[(func(x+h,y)-func(x,y))/h,(func(x,y+h)-func(x,y))/h]]))
+    return(np.array([[(func(x+h,y)-func(x,y))/h],[(func(x,y+h)-func(x,y))/h]]))
 
 def hessian(func, x, y, h = 10**(-6)): # returns a hessian matrix of func at x, y. for some reason doesnt always work w h = e-8
     f1 = lambda x, y: ((func(x+h,y)-func(x,y))/h)
@@ -47,4 +52,83 @@ def hessian(func, x, y, h = 10**(-6)): # returns a hessian matrix of func at x, 
     return(np.array([[(f1(x+h,y)-f1(x,y))/h,(f1(x,y+h)-f1(x,y))/h],
                       [(f2(x+h,y)-f2(x,y))/h,(f2(x,y+h)-f2(x,y))/h]]))
 
-limit(f3,0,-1,delta=0.1)
+#limit(f1,1,1,delta=0.01)
+
+#task 3
+
+def F(x,y,z):
+    return(x+2*y+z+np.e**(2*z)-1)
+
+
+x = np.linspace(-1,1,100)
+y = np.linspace(-1,1,100)
+X, Y = np.meshgrid(x,y)
+Z = np.zeros_like(X)
+
+
+for i in range(X.shape[0]):
+    for j in range(X.shape[1]): # iterate through the grid and do fszolve for z for each point
+        Z[i,j] = scipy.optimize.fsolve(lambda z: F(X[i,j],Y[i,j],z),0)[0]
+
+ax = plt.figure().add_subplot(projection='3d')
+ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8, alpha=0.3) # plot the found surfacer
+
+f = lambda a,b: scipy.interpolate.RegularGridInterpolator((x, y), Z)([[a,b]])[0] # interpolate so that we have z(x,y) as a callable function
+
+g = grad(f,0,0)
+h = hessian(f,0,0) # we will use these every time in coefficients for P2, so calculating them here saves time
+def P2(x,y):
+    point = [[x,y]]
+    return((f(0,0) + (point@g)[0] + ((point)@(np.cross(h,point)))[0]*0.5)[0])
+
+Z1 = np.zeros_like(X)
+for i in range(X.shape[0]):
+    for j in range(X.shape[1]): # we find the Z values for the P2 approximation
+        Z1[i,j] = P2(X[i,j],Y[i,j])
+
+ax.plot_surface(X,Y, Z1, edgecolor='red', lw=0.5, rstride=8, cstride=8, alpha=0.3)
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Graphs of the implicit function (blue) and its Taylor approximation (red)')
+
+plt.figure(figsize=(6,5))
+pcm = plt.pcolormesh(X,Y,abs(Z-Z1), cmap = 'inferno') # heat map of the error in approximation
+plt.colorbar(pcm, label='|Error| (log scale)')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Absolute Error between f(x,y) and Taylor Approximation')
+
+plt.show()
+
+#task 4
+
+def task4_f(x,y):
+    return((x**2+y-11)**2+(x+y**2-7)**2)
+
+def gradient_descent(f, x, y, alpha = 0.01, steps = 20):
+    X = np.transpose([[x,y]])
+    for i in range (steps):
+        X_new = X - alpha*grad(f,X[0,0],X[1,0])
+        X = X_new
+    return(X_new)
+
+x = np.linspace(-5,5,100)
+y = np.linspace(-5,5,100)
+X, Y = np.meshgrid(x,y)
+Z = task4_f(X,Y)
+
+
+ax = plt.figure().add_subplot(projection='3d')
+ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,alpha=0.3)
+ax.contourf(X,Y,Z,30, cmap='coolwarm',alpha=0.85, zdir='z', offset=np.nanmin(Z))
+ax.set(xlim=(-5, 5), ylim=(-5, 5), zlim=(np.nanmin(Z),np.nanmax(Z)),xlabel='X', ylabel='Y', zlabel='Z')
+
+for i in range(1,20):
+    x, y = gradient_descent(task4_f,0,0, steps = i)
+    ax.scatter(x,y,task4_f(x,y), s = 20, color = 'red',depthshade=False)
+
+for i in range(1,20):
+    x, y = gradient_descent(task4_f,0.2,-4, steps = i)
+    ax.scatter(x,y,task4_f(x,y), s = 20, color = 'green',depthshade=False)
+
+plt.show()
