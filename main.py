@@ -10,7 +10,7 @@ from scipy.optimize import fmin
 from matplotlib import cm
 from mpl_toolkits.mplot3d import axes3d
 import scipy
-import time
+import code
 
 
 
@@ -195,3 +195,5 @@ Hessian4_1 = hessian(task4_f, gradient_descent(task4_f, 0,0)[0], gradient_descen
 grad4_2 = grad(task4_f, gradient_descent(task4_f, 0.2,-4)[0], gradient_descent(task4_f, 0.2,-4)[1])
 Hessian4_2 = hessian(task4_f, gradient_descent(task4_f, 0.2,-4)[0], gradient_descent(task4_f, 0.2,-4)[1])
 # Gradient and Hessian for x_20 starting from either starting value
+
+code.interact(local=locals())
