@@ -148,7 +148,7 @@ plt.title('Graphs of the implicit function (blue) and its Taylor approximation (
 
 plt.figure(figsize=(6,5))
 pcm = plt.pcolormesh(X,Y,abs(Z-Z1), cmap = 'inferno') # heat map of the error in approximation
-plt.colorbar(pcm, label='|Error| (log scale)')
+plt.colorbar(pcm, label='|Error|')
 plt.xlabel('x')
 plt.ylabel('y')
 plt.title('Absolute Error between f(x,y) and Taylor Approximation')
