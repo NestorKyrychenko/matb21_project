@@ -159,7 +159,10 @@ fig.colorbar(hplot, location='right')
 print('The gradient of g(x,y) at (0,0) is: ', grad(g2, 0, 0), '\n and the Hessian matrix of g at (0,0) is: \n', hessian(g2, 0, 0))
     
 
-#task 3
+#%%task 3
+
+def grad(func, x, y, h = 10**(-6)): # returns apporx grad for function at (x,y) as an array
+    return(np.array([[(func(x+h,y)-func(x,y))/h],[(func(x,y+h)-func(x,y))/h]]))
 
 def F(x,y,z):
     return(x+2*y+z+np.e**(2*z)-1)
@@ -205,7 +208,7 @@ plt.title('Absolute Error between f(x,y) and Taylor Approximation')
 
 plt.show()
 
-#task 4
+#%%task 4
 
 def task4_f(x,y):                                             # Defining Himmelblau function
     return((x**2+y-11)**2+(x+y**2-7)**2)
@@ -224,7 +227,7 @@ Z = task4_f(X,Y)                 # Setting up the space in which we plot
 
 
 ax = plt.figure().add_subplot(projection='3d')
-ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,alpha=0.3)
+ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,alpha=0.3, cmap='coolwarm')
 ax.contourf(X,Y,Z,30, cmap='coolwarm',alpha=0.85, zdir='z', offset=np.nanmin(Z))
 ax.set(xlim=(-5, 5), ylim=(-5, 5), zlim=(np.nanmin(Z),np.nanmax(Z)),xlabel='X', ylabel='Y', zlabel='Z') # Add surface plot and contour to figure
 
