@@ -148,7 +148,10 @@ for i in range(X.shape[0]):
         Z[i,j] = np.abs(np.linalg.det(hessian(sinfunc, i, j)) - np.linalg.det(sinhessian(i, j)))
 
 fig, ax = plt.subplots()
-hplot = ax.pcolormesh(X, Y, Z, cmap='vanimo')
+hplot = ax.pcolormesh(X, Y, Z, cmap='binary')
+ax.set_title('Absolute values of the difference of the determinant of the approximated Hessian and the analytical Hessian of sin(x+y)')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
 fig.colorbar(hplot, location='right')
 
 #using g(x,y) = (x**2 + 3 * y**2)*np.e**(-x**2-y**2) at min point (0,0):
