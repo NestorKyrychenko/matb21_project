@@ -157,10 +157,10 @@ plt.show()
 
 #task 4
 
-def task4_f(x,y):
+def task4_f(x,y):                                             # Defining Himmelblau function
     return((x**2+y-11)**2+(x+y**2-7)**2)
 
-def gradient_descent(f, x, y, alpha = 0.01, steps = 20):
+def gradient_descent(f, x, y, alpha = 0.01, steps = 20):         # Implementing gradient descent algorithm
     X = np.transpose([[x,y]])
     for i in range (steps):
         X_new = X - alpha*grad(f,X[0,0],X[1,0])
@@ -170,20 +170,28 @@ def gradient_descent(f, x, y, alpha = 0.01, steps = 20):
 x = np.linspace(-5,5,100)
 y = np.linspace(-5,5,100)
 X, Y = np.meshgrid(x,y)
-Z = task4_f(X,Y)
+Z = task4_f(X,Y)                 # Setting up the space in which we plot
 
 
 ax = plt.figure().add_subplot(projection='3d')
 ax.plot_surface(X, Y, Z, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,alpha=0.3)
 ax.contourf(X,Y,Z,30, cmap='coolwarm',alpha=0.85, zdir='z', offset=np.nanmin(Z))
-ax.set(xlim=(-5, 5), ylim=(-5, 5), zlim=(np.nanmin(Z),np.nanmax(Z)),xlabel='X', ylabel='Y', zlabel='Z')
+ax.set(xlim=(-5, 5), ylim=(-5, 5), zlim=(np.nanmin(Z),np.nanmax(Z)),xlabel='X', ylabel='Y', zlabel='Z') # Add surface plot and contour to figure
 
 for i in range(1,20):
     x, y = gradient_descent(task4_f,0,0, steps = i)
+    # applying algorithm and marking progression, starting at (0,0)
     ax.scatter(x,y,task4_f(x,y), s = 20, color = 'red',depthshade=False)
 
 for i in range(1,20):
     x, y = gradient_descent(task4_f,0.2,-4, steps = i)
+    # applying algorithm and marking progression, starting at (0.2,-4)
     ax.scatter(x,y,task4_f(x,y), s = 20, color = 'green',depthshade=False)
 
 plt.show()
+
+grad4_1 = grad(task4_f, gradient_descent(task4_f, 0,0)[0], gradient_descent(task4_f, 0,0)[1])
+Hessian4_1 = hessian(task4_f, gradient_descent(task4_f, 0,0)[0], gradient_descent(task4_f, 0,0)[1])
+grad4_2 = grad(task4_f, gradient_descent(task4_f, 0.2,-4)[0], gradient_descent(task4_f, 0.2,-4)[1])
+Hessian4_2 = hessian(task4_f, gradient_descent(task4_f, 0.2,-4)[0], gradient_descent(task4_f, 0.2,-4)[1])
+# Gradient and Hessian for x_20 starting from either starting value
