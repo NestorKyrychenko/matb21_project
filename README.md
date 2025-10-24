@@ -1,2 +1,2 @@
-# matb32_project
-Programming project for MATB32, HT2025, group 7.
+# matb21_project
+Programming project for MATB21, HT2025, group 7.
